@@ -1,5 +1,8 @@
 Welcome to NORD VPN for Linux
 ===========================
+
+This is not an offial Nord VPN project, I wanted similar functionality on Linux as they provide on other platforms. They upgrade and add servers regularly so a method to manage and connect to the system with the lowest load was needed for Linux.
+
 This Python script accepts a parameter of c for country and automatically downloads and connects you to the NordVPN system that has the lowest load.
 
 It is currently a early BETA version that only covers the described functionality. 
