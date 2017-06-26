@@ -39,6 +39,8 @@ parser.add_option("-a", "--all", action="store_true", dest="dispall", default=Fa
 
 def get_api_files(localFile, remoteFile):
 
+    # Download OpenVPN files
+
     vpnFileUrl = openVPNFilesURL + "/" + remoteFile
 
     print "Downloading " + vpnFileUrl + " -> " + localFile
@@ -46,6 +48,11 @@ def get_api_files(localFile, remoteFile):
 
     with open(localFile, "wb") as code:
         code.write(apif.content)
+
+    update_vpn_config(localFile)
+
+
+def update_vpn_config(localFile):
 
     os.rename( localFile, localFile+"~" )
     destination= open( localFile, "w" )
@@ -58,7 +65,7 @@ def get_api_files(localFile, remoteFile):
            destination.write( line )
            
     
-    os.remove(localFile+"~")
+    os.remove(localFile+"~")   
     
 def gen_remote_filename(fqdn):
     return fqdn + "." + DEF_PROTO
@@ -91,12 +98,6 @@ if not (opts.country is None):
     countryFlag = opts.country.upper()
 
 
-lcount = len(data)
-print lcount
-print countryFlag
-
-
-
 for s in range(lcount):
     if data[s]['load'] < high_limit or dispall == True:
         if len(str(countryFlag)) > 1 and countryFlag == str(data[s]['flag']):
@@ -121,7 +122,8 @@ for s in range(lcount):
     
 #print candidate + ' ' + str(min_load) + " - " + loc_file
 print "***********************************************************************************"
-print 
+print
+print "      Country: " + countryFlag
 print "Connecting to: " + loc_file
 print " Current Load: " + str(min_load)
 print
