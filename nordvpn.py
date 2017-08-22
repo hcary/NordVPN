@@ -116,14 +116,6 @@ def start_vpn(loc_file):
     print
     print "***********************************************************************************"
     
-    #options = " --writepid " + openVPNPid + " " + loc_file
-#    options = " --config " + loc_file
-#    openvpn_cmd = ['sudo', 'openvpn', options]
-
-#    prog = subprocess.Popen(openvpn_cmd)   
-    
-#    print prog.pid
-
     pid=os.fork()
     if pid==0: # new process
         print "sudo openvpn  --config " + loc_file + " &"
