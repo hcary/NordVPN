@@ -27,3 +27,6 @@ Change **authFile** to point to you auth file
 
 The default is to use UDP but can be changed to TCP by chaning the **DEF_PROTO**value in the configuration file. 
 
+# nordVPN-IKEv2-ipsec
+
+# sudo ipsec up NordVPN 
