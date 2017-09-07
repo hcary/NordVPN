@@ -8,6 +8,8 @@ from optparse import OptionParser
 import ConfigParser
 import os
 import subprocess
+import libnordvpn
+
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
