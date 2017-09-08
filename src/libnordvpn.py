@@ -40,23 +40,23 @@ class NordVPN:
  
         data = json.loads(r.text)
     
-        return data
+        
     
         lcount = len(data)
         for s in range(lcount):
             
-            ip_address[ data[s]['id'] ]     = data[s]['ip_address']  
-            flag[ data[s]['id'] ]           = data[s]['flag']
-            country[ data[s]['id'] ]        = data[s]['country']
-            load[ data[s]['id'] ]           = data[s]['load']
-            domain[ data[s]['id'] ]         = data[s]['domain']
-            ikev2[ data[s]['id'] ]          = data[s]['features']['ikev2']
-            openvpn_udp[ data[s]['id'] ]    = data[s]['features']['openvpn_udp']
-            openvpn_tcp[ data[s]['id'] ]    = data[s]['features']['openvpn_tcp']
+            self.ip_address[ data[s]['id'] ]     = data[s]['ip_address']  
+            self.flag[ data[s]['id'] ]           = data[s]['flag']
+            self.country[ data[s]['id'] ]        = data[s]['country']
+            self.load[ data[s]['id'] ]           = data[s]['load']
+            self.domain[ data[s]['id'] ]         = data[s]['domain']
+            self.ikev2[ data[s]['id'] ]          = data[s]['features']['ikev2']
+            self.openvpn_udp[ data[s]['id'] ]    = data[s]['features']['openvpn_udp']
+            self.openvpn_tcp[ data[s]['id'] ]    = data[s]['features']['openvpn_tcp']
             
             
             #catagories[ data[s]['id'] ][ data[s]['categories'] ][ data[s]['name'] ]
-           
+        return data   
             
     def get_api_files(self, localFile, remoteFile):
     
