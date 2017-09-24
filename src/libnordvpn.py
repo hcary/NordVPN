@@ -10,7 +10,6 @@ import requests
 class NordVPN:
     
     data        = {}
-    
     flag        = {}
     country     = {}
     load        = {}
@@ -20,14 +19,19 @@ class NordVPN:
     openvpn_tcp = {}
     ip_address  = {}
     
+    curmin      = 100
+    bestId      = ''
+    bestArray   = ''
     
     def __init__(self):
 
-        self.apiURL          = 'http://api.nordvpn.com/server'
-        self.openVPNFiles    = 'https://nordvpn.com/api/files'
-        self.openVPNFilesURL = 'https://nordvpn.com/api/files/download'
-
-    
+        self.apiURL             = 'http://api.nordvpn.com/server'
+        self.openVPNFiles       = 'https://nordvpn.com/api/files'
+        self.openVPNFilesURL    = 'https://nordvpn.com/api/files/download'
+        #self.data               = {}
+        self.curmin             = 100
+        self.bestId             = ''
+        
     def get_servers(self):     
 
         print "Calling " + self.apiURL
@@ -39,12 +43,19 @@ class NordVPN:
             return 'Error ' + r.status_code
  
         data = json.loads(r.text)
-    
         
-    
         lcount = len(data)
         for s in range(lcount):
             
+            if data[s]['load'] < self.curmin:
+                self.curmin = data[s]['load']
+                self.bestId = data[s]['id']
+                self.bestArray = s
+                
+                #print "Current min: " + str(self.curmin)
+                #print "  Server ID: " + str(self.bestId)
+                
+                                      
             self.ip_address[ data[s]['id'] ]     = data[s]['ip_address']  
             self.flag[ data[s]['id'] ]           = data[s]['flag']
             self.country[ data[s]['id'] ]        = data[s]['country']
@@ -56,8 +67,21 @@ class NordVPN:
             
             
             #catagories[ data[s]['id'] ][ data[s]['categories'] ][ data[s]['name'] ]
-        return data   
+        return data
+    
+
+        
+    def get_catagories(self, rid, data):
+        
+        print rid
+        lcount = len(data[rid]['categories'])
+        
+        for s in range(lcount):
+            print 'Catagories: ' + str(data[s]['categories']['name'])
             
+        
+        
+        
     def get_api_files(self, localFile, remoteFile):
     
         # Download OpenVPN files
