@@ -10,6 +10,9 @@ import os
 import subprocess
 import libnordvpn
 
+RESTART = "sudo ipsec restart"
+TUN_UP = "sudo ipsec up NordVPN"
+TUN_DOWN = "sudo ipsec down NordVPN"
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
@@ -17,13 +20,12 @@ APPROOT = HOMEDIR + ".nordvpn/"
 config = ConfigParser.ConfigParser()
 config.read(APPROOT + "nordvpn.conf")
 
+# Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
 server_list     = {}
 BestServer      = "none"
-apiURL          = config.get('nordvpn', 'apiURL')
+
 authFile        = config.get('nordvpn', 'authFile')
-openVPNFiles    = config.get('nordvpn', 'openVPNFiles')
-openVPNFilesURL = config.get('nordvpn', 'openVPNFilesURL')
 openVPNPid      = config.get('nordvpn', 'pid')
 DEF_PROTO       = config.get('nordvpn', config.get('nordvpn', 'DEF_PROTO'))
 VPNConfigs      = os.getenv("HOME") + "/" + config.get('nordvpn', 'openVpnFilesPath') + "/"

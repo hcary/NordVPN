@@ -36,3 +36,5 @@ for record in range(lcount):
     print "     Domain: " + str(data[x.bestArray]['domain'])
         #x.get_catagories(self, rid, data)   
     
+    
+    
