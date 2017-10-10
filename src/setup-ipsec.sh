@@ -1,5 +1,6 @@
 #!/bin/bash
 
+declare -a packages=("strongswan-ikev2" "strongswan" "strongswan-plugin-eap-mschapv2" "libstrongswan-standard-plugins")
 NORD_CONF_DIR=$HOME/.nordvpn
 
 echo ""
@@ -11,22 +12,37 @@ echo ""
 echo "This script will execute apt-get using sudo to install the prerequisites to run IKEv2/IPSEC mode NordVPN"
 echo ""
 
+CONSTRNT_FILE_TMP=$NORD_CONF_DIR"/constraints.conf"
+SECRETS_TMP=$NORD_CONF_DIR"/ipsec.secrets"
+IPSECCNF_TMP=$NORD_CONF_DIR"/ipsec.conf"
+NORD_CRT_TMP=$NORD_CONF_DIR"/NordVPN.der"
 
 CONSTRNT_FILE="/etc/strongswan.d/charon/constraints.conf"
 SECRETS="/etc/ipsec.secrets​"
 IPSECCNF="/etc/ipsec.conf"
 NORD_CRT="/etc/ipsec.d/cacerts/NordVPN.der"
 
-CONSTRNT_FILE_TMP=$NORD_CONF_DIR"/constraints.conf"
-SECRETS_TMP=$NORD_CONF_DIR"/ipsec.secrets"
-IPSECCNF_TMP=$NORD_CONF_DIR"/ipsec.conf"
-NORD_CRT_TMP=$NORD_CONF_DIR"/NordVPN.der"
-
 if [ "$1" == "clean" ];
 then
     rm -f $CONSTRNT_FILE_TMP $SECRETS_TMP $IPSECCNF_TMP $NORD_CRT_TMP $CONSTRNT_FILE_TMP.bak
     exit
 fi
+
+
+echo "Checking Dependencies... "
+## now loop through the above array
+for pkg in "${packages[@]}"
+do
+    if [ $(dpkg-query -W -f='${Status}' $pkg 2>/dev/null | grep -c "ok installed") -eq 0 ];
+        then
+            #apt-get install strongswan strongswan-plugin-eap-mschapv2 strongswan-ikev2 libstrongswan-standard-plugins
+            sudo apt-get install $pkg
+    else
+            echo "  $pkg Installed..."
+    fi
+done
+
+exit
 
 # 
 
