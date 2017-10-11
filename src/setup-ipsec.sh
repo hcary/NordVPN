@@ -29,22 +29,6 @@ then
 fi
 
 
-echo "Checking Dependencies... "
-## now loop through the above array
-for pkg in "${packages[@]}"
-do
-    if [ $(dpkg-query -W -f='${Status}' $pkg 2>/dev/null | grep -c "ok installed") -eq 0 ];
-        then
-            #apt-get install strongswan strongswan-plugin-eap-mschapv2 strongswan-ikev2 libstrongswan-standard-plugins
-            sudo apt-get install $pkg
-    else
-            echo "  $pkg Installed..."
-    fi
-done
-
-exit
-
-# 
 
 sudo apt install strongswan strongswan-plugin-eap-mschapv2 strongswan-ikev2 libstrongswan-standard-plugins
 echo ""
@@ -118,6 +102,20 @@ read yn
 
 if [ "$yn" == "y" ];
 then
+
+    echo "Checking Dependencies... "
+    ## now loop through the above array
+    for pkg in "${packages[@]}"
+    do
+        if [ $(dpkg-query -W -f='${Status}' $pkg 2>/dev/null | grep -c "ok installed") -eq 0 ];
+            then
+                #apt-get install strongswan strongswan-plugin-eap-mschapv2 strongswan-ikev2 libstrongswan-standard-plugins
+                sudo apt-get install $pkg
+        else
+                echo "  $pkg Installed..."
+        fi
+    done
+
 
     sudo cp $CONSTRNT_FILE_TMP $CONSTRNT_FILE
     sudo cp $SECRETS_TMP $SECRETS

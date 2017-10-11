@@ -2,19 +2,22 @@
 
 
 from libnordvpn import NordVPN 
+import string
 
 #result = libnordvpn.get_servers()
 
 x = NordVPN()
+x.cflag = "US"
+
 data = x.get_servers()
 
 lcount = len(data)
 for record in range(lcount):
 
     rid = data[record]['id']
-    if( str(data[record]['flag']) == 'US' ):
+    #if( str(data[record]['flag']) == 'US' ):
 
-        print 'DOMAIN: ' + str(x.domain[rid])
+    #    print 'DOMAIN: ' + str(x.domain[rid])
         #print 'DOMAIN: ' + str(data[rid]['domain'])
         
         #print '         ID: ' + str(data[record]['id']) 
@@ -29,12 +32,35 @@ for record in range(lcount):
         
         #search_keywords
         
-        print '------------------------------------------------------'
+    #    print '------------------------------------------------------'
 
-    print "Current min: " + str(x.curmin)
+    #if( str(data[record]['flag']) == 'US' ):
     print "  Server ID: " + str(x.bestId)
     print "     Domain: " + str(data[x.bestArray]['domain'])
+    print "       Load: " + str(data[record]['load']) + " Current min: " + str(x.curmin)
+    print '------------------------------------------------------'
         #x.get_catagories(self, rid, data)   
+    vpn_server = str(data[x.bestArray]['domain'])
     
+fin = open("/home/hcary/.nordvpn/ipsec.conf", "r")
+fout = open("/etc/ipsec.conf", "w")
+
+lines = fin.readlines()
+for line in lines:
+    line = str(line)
+    line = line.rstrip("\n")
+    
+    if line.find('right=SERVER') != -1:
+        line = "  right=" + vpn_server
+        
+    print line
+    fout.write(line + '\n') 
+    
+
+fout.close
+
+
+
+   
     
     

@@ -23,6 +23,7 @@ class NordVPN:
     bestId      = ''
     bestArray   = ''
     
+    
     def __init__(self):
 
         self.apiURL             = 'http://api.nordvpn.com/server'
@@ -31,6 +32,7 @@ class NordVPN:
         #self.data               = {}
         self.curmin             = 100
         self.bestId             = ''
+        self.cflag              = None
         
     def get_servers(self):     
 
@@ -46,6 +48,11 @@ class NordVPN:
         
         lcount = len(data)
         for s in range(lcount):
+            
+            
+            if self.cflag is not None:
+                if str(data[s]['flag']) != self.cflag:
+                    continue
             
             if data[s]['load'] < self.curmin:
                 self.curmin = data[s]['load']
