@@ -1,0 +1,23 @@
+#!/bin/sh
+
+SCRIPTNAME=$0
+
+
+case "$1" in
+    start)
+        sudo ./nordvpn-ipsec.py
+        sudo ipsec up NordVPN
+        ;;
+    steop)
+        sudo ipsec down NordVPN
+        ;;
+    status)
+        sudo ipsec status NordVPN
+        ;;
+  *)
+        echo "Usage: $SCRIPTNAME {start|stop|status}" >&2
+        exit 3
+        ;;
+esac
+
+exit 0

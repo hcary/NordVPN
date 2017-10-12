@@ -3,7 +3,14 @@
 
 from libnordvpn import NordVPN 
 import string
+import os
+import subprocess
 
+ipsec_restart = "sudo /usr/sbin/ipsec restart"
+ipsec_up = "sudo ipsec up NordVPN"
+ipsec_up = "ipsec up NordVPN"
+ipsec_down = "sudo ipsec down NordVPN"
+ipsec_status = "sudo ipsec status"
 #result = libnordvpn.get_servers()
 
 x = NordVPN()
@@ -35,32 +42,48 @@ for record in range(lcount):
     #    print '------------------------------------------------------'
 
     #if( str(data[record]['flag']) == 'US' ):
-    print "  Server ID: " + str(x.bestId)
-    print "     Domain: " + str(data[x.bestArray]['domain'])
-    print "       Load: " + str(data[record]['load']) + " Current min: " + str(x.curmin)
-    print '------------------------------------------------------'
+#    print "  Server ID: " + str(x.bestId)
+#    print "     Domain: " + str(data[x.bestArray]['domain'])
+#    print "       Load: " + str(data[record]['load']) + " Current min: " + str(x.curmin)
+#    print '------------------------------------------------------'
         #x.get_catagories(self, rid, data)   
     vpn_server = str(data[x.bestArray]['domain'])
-    
-fin = open("/home/hcary/.nordvpn/ipsec.conf", "r")
-fout = open("/etc/ipsec.conf", "w")
-
-lines = fin.readlines()
-for line in lines:
-    line = str(line)
-    line = line.rstrip("\n")
-    
-    if line.find('right=SERVER') != -1:
-        line = "  right=" + vpn_server
-        
-    print line
-    fout.write(line + '\n') 
-    
-
-fout.close
 
 
 
+filein = "/home/hcary/.nordvpn/ipsec.conf"
+fileout = "/etc/ipsec.conf"
+
+f = open(filein,'r')
+filedata = f.read()
+f.close()
+
+newdata = filedata.replace("right=SERVER","right=" + vpn_server)
+
+f = open(fileout,'w')
+f.write(newdata)
+f.close()
+
+
+print "***************************************"
+print " Starting IPSEC for " + vpn_server
+#pid=os.fork()
+#if pid==0: # new process
+
+print "  " + ipsec_restart
+os.system(ipsec_restart)
+    #exit()
+
+#pid=os.fork()
+#if pid==0: # new process
+#    print "  sudo ipsec up NordVPN"
+#    os.system("sudo ipsec up NordVPN")
+#    exit()  
+
+#subprocess.Popen(["nohup", "sudo ipsec up NordVPN"],
+#    stdout=open('/dev/null', 'w'),
+#    stderr=open('logfile.log', 'a'),
+#    preexec_fn=os.setpgrp
+#    )
    
-    
     

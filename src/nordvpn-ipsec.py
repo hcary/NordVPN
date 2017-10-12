@@ -10,10 +10,10 @@ import os
 import subprocess
 import libnordvpn
 
-RESTART = "sudo ipsec restart"
-VPN_UP = "sudo ipsec up NordVPN"
-VPN_DOWN = "sudo ipsec down NordVPN"
-VPN_STATUS = "sudo ipsec status"
+ipsec_restart = "sudo ipsec restart"
+ipsec_up = "sudo ipsec up NordVPN"
+ipsec_down = "sudo ipsec down NordVPN"
+ipsec_status = "sudo ipsec status"
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
