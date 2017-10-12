@@ -37,6 +37,7 @@ if [ ! -d $NORD_CONF_DIR ];
 then
     
     mkdir $NORD_CONF_DIR
+    chmod 700 $NORD_CONF_DIR
 fi
 
    
