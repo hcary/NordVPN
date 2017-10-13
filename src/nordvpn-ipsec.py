@@ -1,14 +1,17 @@
 #!/usr/bin/python
 
 import sys
-import json
-import requests
-from pprint import pprint
+#import json
+#import requests
+#from pprint import pprint
 from optparse import OptionParser
 import ConfigParser
 import os
 import subprocess
 import libnordvpn
+from libnordvpn import NordVPN 
+import string
+import os
 
 ipsec_restart = "sudo ipsec restart"
 ipsec_up = "sudo ipsec up NordVPN"
@@ -61,120 +64,77 @@ def help_func():
     
     exit
     
-def get_api_files(localFile, remoteFile):
+x = NordVPN()
+x.cflag = "US"
 
-    global BestServer
-    # Download OpenVPN files
-    if (os.path.exists(loc_file)):
-        BestServer = localFile
-        return
-    
-    vpnFileUrl = openVPNFilesURL + "/" + remoteFile
-
-    print "Downloading " + vpnFileUrl + " -> " + localFile
-    apif = requests.get(vpnFileUrl)
-    
-    #if isinstance('{"status":404}', apif.content):
-    if '{"status":404}' in apif.content:
-       print "Error: status: 404"
-       #os.remove(localFile)
-    else:
-        with open(localFile, "wb") as code:
-            code.write(apif.content)
-
-        update_vpn_config(localFile)
-        BestServer = localFile
-        
-def update_vpn_config(localFile):
-
-    os.rename( localFile, localFile+"~" )
-    destination= open( localFile, "w" )
-    source= open( localFile+"~", "r" )
-    for line in source:
-        if "auth-user-pass" in line:
-            line = line.replace("\n", " ")
-            destination.write( line + " " + authFile )
-        else:
-           destination.write( line )
-
-    os.remove(localFile+"~")   
-    
-def gen_remote_filename(fqdn):
-    return fqdn + "." + DEF_PROTO
-
-def gen_local_filename(fqdn):
-    return fqdn + "." + DEF_PROTO + ".ovpn"
-
-def gen_local_path(fqdn):
-    return VPNConfigs + gen_local_filename(fqdn) 
-
-def set_path(str):
-    if str[0] != "/":
-        return HOMEDIR + str
-
-def start_vpn(loc_file):
-    print "***********************************************************************************"
-    print
-    print "      Country: " + countryFlag
-    print "Connecting to: " + loc_file
-    print " Current Load: " + str(min_load)
-    print
-    print "***********************************************************************************"
-    
-    pid=os.fork()
-    if pid==0: # new process
-        print "sudo openvpn  --config " + loc_file + " &"
-        os.system("sudo openvpn  --config " + loc_file + " &")
-        exit()
-    
-####################################################################
-# Main routine start
-
-if ( help_flag ):
-    help_func()
-    
-authFile = set_path(authFile)
-#print authFile   
-#
-# Main function
-print "Calling " + apiURL
-r = requests.get(apiURL)
-print r.status_code
-if r.status_code != 200:
-    print "Error retrieving data from " + apiURL
-    sys.exit()
-
-data = json.loads(r.text)
-
-if not (opts.country is None):
-    countryFlag = opts.country.upper()
+data = x.get_servers()
 
 lcount = len(data)
+for record in range(lcount):
 
-for s in range(lcount):
-    if data[s]['load'] < high_limit or dispall == True:
-        if len(str(countryFlag)) > 1 and countryFlag == str(data[s]['flag']):
-            
-            #print str(data[s]['domain']) + " - " + str(data[s]['load'])
-            server_list[str(data[s]['domain'])] = [data[s]['load']]
-            
-            if data[s]['load'] < min_load:
-                min_load = data[s]['load']
-                candidate = data[s]['domain']
+    rid = data[record]['id']
+    #if( str(data[record]['flag']) == 'US' ):
 
-                loc_file = gen_local_path(data[s]['domain'])
-                rem_file = gen_remote_filename(data[s]['domain'])
-            
-                #if not (os.path.exists(loc_file)):
-            #   print loc_file + " Going to download..."
-                get_api_files(loc_file, rem_file)
-            
-        elif len(str(opts.country)) == 0:
-            print "Inside Else...\n"
-            print str(data[s]['domain']) + " - " + str(data[s]['load'])
+    #    print 'DOMAIN: ' + str(x.domain[rid])
+        #print 'DOMAIN: ' + str(data[rid]['domain'])
+        
+        #print '         ID: ' + str(data[record]['id']) 
+        #print '     Domain: ' + str(data[record]['domain'])   
+        #print ' IP Address: ' + str(data[record]['ip_address'])
+        #print '       Flag: ' + str(data[record]['flag'])
+        #print '    Country: ' + str(data[record]['country'])
+        #print '       Load: ' + str(data[record]['load'])
+        #print '      IKEv2: ' + str(data[record]['features']['ikev2'])
+        #print 'OpenVPN UDP: ' + str(data[record]['features']['openvpn_udp'])
+        #print 'OpenVPN TCP: ' + str(data[record]['features']['openvpn_tcp'])
+        
+        #search_keywords
+        
+    #    print '------------------------------------------------------'
+
+    #if( str(data[record]['flag']) == 'US' ):
+    print "  Server ID: " + str(x.bestId)
+    print "     Domain: " + str(data[x.bestArray]['domain'])
+    print "       Load: " + str(data[record]['load']) + " Current min: " + str(x.curmin)
+    print '------------------------------------------------------'
+        #x.get_catagories(self, rid, data)   
+    vpn_server = str(data[x.bestArray]['domain'])
 
 
-if startVpn == True:
-    start_vpn(BestServer)
+
+filein = "/home/hcary/.nordvpn/ipsec.conf"
+fileout = "/etc/ipsec.conf"
+
+f = open(filein,'r')
+filedata = f.read()
+f.close()
+
+newdata = filedata.replace("right=SERVER","right=" + vpn_server)
+
+f = open(fileout,'w')
+f.write(newdata)
+f.close()
 
 
+print "***************************************"
+print " Starting IPSEC for " + vpn_server
+#pid=os.fork()
+#if pid==0: # new process
+
+print "  " + ipsec_restart
+os.system(ipsec_restart)
+    #exit()
+
+#pid=os.fork()
+#if pid==0: # new process
+#    print "  sudo ipsec up NordVPN"
+#    os.system("sudo ipsec up NordVPN")
+#    exit()  
+
+#subprocess.Popen(["nohup", "sudo ipsec up NordVPN"],
+#    stdout=open('/dev/null', 'w'),
+#    stderr=open('logfile.log', 'a'),
+#    preexec_fn=os.setpgrp
+#    )
+   
+    
