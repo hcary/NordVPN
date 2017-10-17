@@ -121,6 +121,8 @@ cmd = ipsec_up + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
 print "cmd: " + cmd
 os.system( cmd )
 
+time.sleep(30)
+
 #pid=os.fork()
 #if pid==0: # new process
 #    print "  sudo ipsec up NordVPN"
