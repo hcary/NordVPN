@@ -12,6 +12,7 @@ import libnordvpn
 from libnordvpn import NordVPN 
 import string
 import os
+import time
 
 ipsec_restart = "sudo ipsec restart"
 ipsec_up = "sudo ipsec up NordVPN"
@@ -100,14 +101,25 @@ f.write(newdata)
 f.close()
 
 
-#print "***************************************"
-#print " Starting IPSEC for " + vpn_server
+print "*************************************************************"
+print ""
+print " Configuring IPSEC for " + vpn_server
+print ""
+print "*************************************************************"
 #pid=os.fork()
 #if pid==0: # new process
 
 #print "  " + ipsec_restart
 #os.system(ipsec_restart)
     #exit()
+cmd = ipsec_restart + ' 2>&1 | tee {}'.format( APPROOT + 'ipsec.log' )
+print "cmd: " + cmd
+os.system( cmd )
+#output = open( tmp_log_file, 'r' ).read()
+
+cmd = ipsec_up + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
+print "cmd: " + cmd
+os.system( cmd )
 
 #pid=os.fork()
 #if pid==0: # new process
