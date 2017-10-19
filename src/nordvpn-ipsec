@@ -2,18 +2,33 @@
 
 SCRIPTNAME=$0
 
+status_chk()
+{
+
+  while :
+  do
+    sudo ipsec status
+    echo "Do something; hit [CTRL+C] to stop!"
+    sleep 10
+  done
+  
+}
+
 
 case "$1" in
     start)
         #sudo ./nordvpn-ipsec.py $@
         sudo ./nordvpn-ipsec.py $@
+        sudo ipsec restart
         sudo ipsec up NordVPN
+        status_chk
         ;;
     stop)
         sudo ipsec down NordVPN
         ;;
     status)
         sudo ipsec status NordVPN
+        status_chk
         ;;
   *)
         echo "Usage: $SCRIPTNAME {start|stop|status}" >&2

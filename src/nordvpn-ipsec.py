@@ -64,7 +64,13 @@ def help_func():
     print "  -h --help      This screen"
     
     exit
+
+def run_cmd(cmd_str):
     
+    cmd = cmd_str + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
+    print "cmd: " + cmd
+    os.system( cmd )
+
 x = NordVPN()
 x.cflag = "US"
 
@@ -112,16 +118,19 @@ print "*************************************************************"
 #print "  " + ipsec_restart
 #os.system(ipsec_restart)
     #exit()
-cmd = ipsec_restart + ' 2>&1 | tee {}'.format( APPROOT + 'ipsec.log' )
-print "cmd: " + cmd
-os.system( cmd )
+#cmd = ipsec_restart + ' 2>&1 | tee {}'.format( APPROOT + 'ipsec.log' )
+#print "cmd: " + cmd
+#os.system( cmd )
 #output = open( tmp_log_file, 'r' ).read()
 
-cmd = ipsec_up + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
-print "cmd: " + cmd
-os.system( cmd )
+#cmd = ipsec_up + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
+#print "cmd: " + cmd
+#os.system( cmd )
 
-time.sleep(30)
+#run_cmd( ipsec_restart )
+#run_cmd( ipsec_up )
+
+#time.sleep(30)
 
 #pid=os.fork()
 #if pid==0: # new process
