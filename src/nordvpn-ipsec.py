@@ -109,39 +109,17 @@ f.close()
 
 print "*************************************************************"
 print ""
-print " Configuring IPSEC for " + vpn_server
+print " Configuring IPSEC for: " + vpn_server
+print "                  Load: " + str(x.curmin)
 print ""
 print "*************************************************************"
-#pid=os.fork()
-#if pid==0: # new process
 
-#print "  " + ipsec_restart
-#os.system(ipsec_restart)
-    #exit()
-#cmd = ipsec_restart + ' 2>&1 | tee {}'.format( APPROOT + 'ipsec.log' )
-#print "cmd: " + cmd
-#os.system( cmd )
-#output = open( tmp_log_file, 'r' ).read()
-
-#cmd = ipsec_up + ' 2>&1 | tee -a {}'.format( APPROOT + 'ipsec.log' )
-#print "cmd: " + cmd
-#os.system( cmd )
 
 #run_cmd( ipsec_restart )
 #run_cmd( ipsec_up )
 
 #time.sleep(30)
 
-#pid=os.fork()
-#if pid==0: # new process
-#    print "  sudo ipsec up NordVPN"
-#    os.system("sudo ipsec up NordVPN")
-#    exit()  
 
-#subprocess.Popen(["/usr/bin/nohup", "/usr/bin/sudo /usr/sbin/ipsec up NordVPN"],
-#    stdout=open('/dev/null', 'w'),
-#    stderr=open('logfile.log', 'a'),
-#    preexec_fn=os.setpgrp
-#    )
    
     

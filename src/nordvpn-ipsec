@@ -20,14 +20,14 @@ case "$1" in
         #sudo ./nordvpn-ipsec.py $@
         sudo ./nordvpn-ipsec.py $@
         sudo ipsec restart
+        sleep 1
         sudo ipsec up NordVPN
-        status_chk
+        sleep 1
         ;;
     stop)
         sudo ipsec down NordVPN
         ;;
     status)
-        sudo ipsec status NordVPN
         status_chk
         ;;
   *)
