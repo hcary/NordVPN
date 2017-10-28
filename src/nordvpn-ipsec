@@ -30,7 +30,7 @@ case "$1" in
     status)
         status_chk
         ;;
-  *)
+    *)
         echo "Usage: $SCRIPTNAME {start|stop|status}" >&2
         exit 3
         ;;

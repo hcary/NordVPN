@@ -93,7 +93,7 @@ for record in range(lcount):
 
 
 
-filein = "/home/hcary/.nordvpn/ipsec.conf"
+filein = APPROOT + "ipsec.conf"
 fileout = "/etc/ipsec.conf"
 
 f = open(filein,'r')
