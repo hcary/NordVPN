@@ -17,16 +17,27 @@ status_chk()
 
 case "$1" in
     start)
-        #sudo ./nordvpn-ipsec.py $@
+        #echo sudo ./nordvpn-ipsec.py $@
         sudo ./nordvpn-ipsec.py $@
         sudo ipsec restart
         sleep 1
         sudo ipsec up NordVPN
         sleep 1
         ;;
+    up)
+        #echo sudo ./nordvpn-ipsec.py $@
+        sudo ./nordvpn-ipsec.py $@
+        sudo ipsec restart
+        sleep 1
+        sudo ipsec up NordVPN
+        sleep 1
+        ;;    
     stop)
         sudo ipsec down NordVPN
         ;;
+    down)
+        sudo ipsec down NordVPN
+        ;;    
     status)
         status_chk
         ;;

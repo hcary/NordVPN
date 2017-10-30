@@ -1,27 +1,18 @@
 #!/usr/bin/python
 
+import os
 import sys
-#import json
-#import requests
-#from pprint import pprint
 from optparse import OptionParser
 import ConfigParser
-import os
-import subprocess
-import libnordvpn
 from libnordvpn import NordVPN 
-import string
-import os
-import time
 
-ipsec_restart = "sudo ipsec restart"
-ipsec_up = "sudo ipsec up NordVPN"
-ipsec_down = "sudo ipsec down NordVPN"
-ipsec_status = "sudo ipsec status"
+#ipsec_restart = "sudo ipsec restart"
+#ipsec_up = "sudo ipsec up NordVPN"
+#ipsec_down = "sudo ipsec down NordVPN"
+#ipsec_status = "sudo ipsec status"
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
-#VPNCONFIGS = os.getenv("HOME") + "/nordvpn.configs/"
 config = ConfigParser.ConfigParser()
 config.read(APPROOT + "nordvpn.conf")
 
@@ -42,15 +33,27 @@ startVpn = False
 help_flag = False
 startVpn = True
 
-parser = OptionParser()
-parser.add_option("-c", "--country", action="store", type="string", dest="country", default="")
+parser = OptionParser("usage: %prog [options] ",
+                          version="%prog 1.0")
+parser.add_option("-c", "--country",
+                action="store",
+                type="string",
+                dest="str_country",
+                default="",
+                help="2 digit country identifier")
+
 parser.add_option("-l", "--load", action="store", type="int", dest="load")
 parser.add_option("-a", "--all", action="store_true", dest="dispall", default=False)
 parser.add_option("-s", "--start", action="store_true", dest="startVpn")
 #parser.add_option("-h", "--help", action="store_true", dest="help_flag", default=False)
 
 #print dispall
-(opts, args) = parser.parse_args()
+(options, args) = parser.parse_args()
+
+#print options
+#print args
+#print options.str_country
+
 file_name =  os.path.basename(sys.argv[0])
 
 def help_func():
@@ -72,7 +75,7 @@ def run_cmd(cmd_str):
     os.system( cmd )
 
 x = NordVPN()
-x.cflag = "US"
+x.cflag = options.str_country
 
 data = x.get_servers()
 
