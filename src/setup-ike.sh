@@ -92,6 +92,7 @@ conn NordVPN
 
 EOF
 
+cp nordvpn-ike.conf ~/.nordvpn
 #sudo wget https://downloads.nordvpn.com/certificates/root.der -O /etc/ipsec.d/cacerts/NordVPN.der
 echo "Downloading NordVPN root Certificate..."
 wget https://downloads.nordvpn.com/certificates/root.der -O $NORD_CRT_TMP

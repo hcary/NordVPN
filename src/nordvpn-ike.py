@@ -14,7 +14,7 @@ from libnordvpn import NordVPN
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
 config = ConfigParser.ConfigParser()
-config.read(APPROOT + "nordvpn.conf")
+config.read(APPROOT + "nordvpn-ike.conf")
 
 # Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
