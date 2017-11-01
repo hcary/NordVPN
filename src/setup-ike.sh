@@ -3,6 +3,7 @@
 #declare -a packages=("strongswan-ikev2" "strongswan" "strongswan-plugin-eap-mschapv2" "libstrongswan-standard-plugins" "python-requests")
 packages="strongswan-ikev2 strongswan strongswan-plugin-eap-mschapv2 libstrongswan-standard-plugins python-requests"
 NORD_CONF_DIR=$HOME/.nordvpn
+pylibpath=`python -c "import sys; print('\n'.join(sys.path))" | sed -r "/^\r?$/d" | head -1`
 
 echo ""
 echo "This script comes without warrenty and is meant to aid you in setting up your NordVPN client configurations and scripts"
