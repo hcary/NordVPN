@@ -133,16 +133,6 @@ then
     echo "Checking Dependencies... "
     ## now loop through the above array
     sudo apt-get install $packages
-#    for pkg in "${packages[@]}"
-#    do
-#        if [ $(dpkg-query -W -f='${Status}' $pkg 2>/dev/null | grep -c "ok installed") -eq 0 ];
-#            then
-#                sudo apt-get install $pkg
-#        else
-#                echo "  $pkg Installed..."
-#        fi
-#    done
-
 
     sudo cp $CONSTRNT_FILE_TMP $CONSTRNT_FILE
     sudo cp $SECRETS_TMP $SECRETS

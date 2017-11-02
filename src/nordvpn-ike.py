@@ -42,9 +42,16 @@ parser.add_option("-c", "--country",
                 default="",
                 help="2 digit country identifier")
 
-parser.add_option("-l", "--load", action="store", type="int", dest="load")
-parser.add_option("-a", "--all", action="store_true", dest="dispall", default=False)
-parser.add_option("-s", "--start", action="store_true", dest="startVpn")
+parser.add_option("-l", "--load",
+                action="store",
+                type="int",
+                dest="load")
+
+parser.add_option("-a", "--all",
+                  action="store_true",
+                  dest="dispall",
+                  default=False)
+
 #parser.add_option("-h", "--help", action="store_true", dest="help_flag", default=False)
 
 #print dispall
