@@ -4,6 +4,7 @@
 packages="strongswan-ikev2 strongswan strongswan-plugin-eap-mschapv2 libstrongswan-standard-plugins python-requests"
 NORD_CONF_DIR=$HOME/.nordvpn
 pylibpath=`python -c "import sys; print('\n'.join(sys.path))" | sed -r "/^\r?$/d" | head -1`
+dstr=`date +"%Y%m%d%H%M"`
 
 echo ""
 echo "This script comes without warrenty and is meant to aid you in setting up your NordVPN client configurations and scripts"
@@ -42,7 +43,29 @@ then
     chmod 700 $NORD_CONF_DIR
 fi
 
-   
+
+#
+# Make backup copies of files before we overwrite
+if [ -f $CONSTRNT_FILE_TMP ]
+then
+    cp $CONSTRNT_FILE_TMP $CONSTRNT_FILE_TMP-${dstr}
+fi
+
+if [ -f $SECRETS_TMP ]
+then
+    cp $SECRETS_TMP $SECRETS_TMP-${dstr}
+fi
+
+if [ -f $IPSECCNF_TMP ]
+then
+    cp $IPSECCNF_TMP $IPSECCNF_TMP-${dstr}
+fi
+
+if [ -f $NORD_CRT_TMP ]
+then
+    cp $NORD_CRT_TMP $NORD_CRT_TMP-${dstr}
+fi
+
 echo "Updating $CONSTRNT_FILE load from yes to no"
 cp $CONSTRNT_FILE $CONSTRNT_FILE_TMP
 sed -i.bak s/load\ =\ yes/load\ =\ no/g $CONSTRNT_FILE_TMP   
