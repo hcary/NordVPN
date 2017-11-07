@@ -112,15 +112,8 @@ lcount = len(data)
 for record in range(lcount):
 
     rid = data[record]['id']
-    #if( str(data[record]['flag']) == 'US' ):
-
-
-    #if( str(data[record]['flag']) == 'US' ):
-    #print "  Server ID: " + str(x.bestId)
-    #print "     Domain: " + str(data[x.bestArray]['domain'])
-    #print "       Load: " + str(data[record]['load']) + " Current min: " + str(x.curmin)
-    #print '------------------------------------------------------'
-        #x.get_catagories(self, rid, data)   
+    print 'rid ' + str(rid)
+    print 'best array: '+ x.bestArray
     vpn_server = str(data[x.bestArray]['domain'])
 
 
