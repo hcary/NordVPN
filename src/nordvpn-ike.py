@@ -104,7 +104,7 @@ def run_cmd(cmd_str):
     os.system( cmd )
 
 x = NordVPN()
-x.cflag = options.str_country
+x.cflag = options.str_country.upper()
 
 data = x.get_servers()
 
@@ -112,8 +112,6 @@ lcount = len(data)
 for record in range(lcount):
 
     rid = data[record]['id']
-    print 'rid ' + str(rid)
-    print 'best array: '+ x.bestArray
     vpn_server = str(data[x.bestArray]['domain'])
 
 
