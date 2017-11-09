@@ -161,6 +161,12 @@ then
     sudo cp $IPSECCNF_TMP $IPSECCNF
     sudo cp $NORD_CRT_TMP $NORD_CRT
 
+    sudo cp nordvpn-ike /usr/local/bin
+    sudo cp nordvpn-ike.py /usr/local/bin
+    
+    sudo chmod +x /usr/local/bin/nordvpn-ike
+    sudo chmod +x /usr/local/bin/nordvpn-ike.py
+
 fi
 
 cat << EOF
