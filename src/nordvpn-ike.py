@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#  MIT License
+# MIT License
 
 # Copyright (c) [2017] [Harvey Cary]
 
@@ -28,11 +28,6 @@ from optparse import OptionParser
 import ConfigParser
 from libnordvpn import NordVPN 
 
-#ipsec_restart = "sudo ipsec restart"
-#ipsec_up = "sudo ipsec up NordVPN"
-#ipsec_down = "sudo ipsec down NordVPN"
-#ipsec_status = "sudo ipsec status"
-
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
 config = ConfigParser.ConfigParser()
@@ -43,25 +38,22 @@ min_load        = 100
 server_list     = {}
 BestServer      = "none"
 
-#authFile        = config.get('nordvpn', 'authFile')
-#openVPNPid      = config.get('nordvpn', 'pid')
-#DEF_PROTO       = config.get('nordvpn', config.get('nordvpn', 'DEF_PROTO'))
-#VPNConfigs      = os.getenv("HOME") + "/" + config.get('nordvpn', 'openVpnFilesPath') + "/"
-#high_limit      = int(config.get('nordvpn', 'limit'))
-
 # defaults
 dispall = False
 startVpn = False
 help_flag = False
 startVpn = True
 
+def_country = config.get('nordvpn', 'DEF_COUNTRY')
+
 parser = OptionParser("usage: %prog [options] ",
                           version="%prog 1.0")
+
 parser.add_option("-c", "--country",
                 action="store",
                 type="string",
                 dest="str_country",
-                default="",
+                default=config.get('nordvpn', 'DEF_COUNTRY'),
                 help="2 digit country identifier")
 
 parser.add_option("-l", "--load",
@@ -74,16 +66,12 @@ parser.add_option("-a", "--all",
                   dest="dispall",
                   default=False)
 
-#parser.add_option("-h", "--help", action="store_true", dest="help_flag", default=False)
 
-#print dispall
 (options, args) = parser.parse_args()
 
-#print options
-#print args
-#print options.str_country
-
 file_name =  os.path.basename(sys.argv[0])
+
+
 
 def help_func():
     print
