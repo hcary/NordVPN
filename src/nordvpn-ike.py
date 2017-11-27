@@ -26,7 +26,7 @@ import os
 import sys
 from optparse import OptionParser
 import ConfigParser
-from libnordvpn import NordVPN 
+from libnordvpn import NordVPN
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"

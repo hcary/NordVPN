@@ -6,6 +6,12 @@ This Python script accepts a parameter of c for country and automatically downlo
 
 It is currently a early BETA version that only covers the described functionality. 
 
+Execution
+---------
+/usr/local/bin/nordvpn.sh **executes** /usr/local/bin/nordvpn.py 
+/usr/local/bin/nordvpn.py **writes startup instructions to** /usr/local/bin/nord.sh
+/usr/local/bin/nordvpn.sh **executes** /usr/local/bin/nord.sh to establish tunnel
+
 Feature Road Map
 ----------------
 
@@ -43,11 +49,11 @@ Connecting to downloads.nordvpn.com (downloads.nordvpn.com)|104.20.16.34|:443...
 HTTP request sent, awaiting response... 200 OK                                                                                                                                    
 Length: 1294 (1.3K) [application/x-x509-ca-cert]                                                                                                                                  
 Saving to: ‘/home/**USERNAME**/.nordvpn/NordVPN.der’                                                                                                                                     
-                                                                                                                                                                                  
+
 /home/hcary/.nordvpn/NordVPN.der             100%[============================================================================================>]   1.26K  --.-KB/s    in 0s       
-                                                                                                                                                                                  
+
 2017-11-02 11:34:19 (12.5 MB/s) - ‘/home/**USERNAME**/.nordvpn/NordVPN.der’ saved [1294/1294]                                                                                            
-                                                                                                                                                                                  
+
 All of the files created by the this install script are located in /home/**USERNAME**/.nordvpn                                                                                           
 
 **You can press y to have the script put the files in place for you or do it manual [y/N]:**
