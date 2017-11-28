@@ -44,8 +44,6 @@ startVpn = False
 help_flag = False
 startVpn = True
 
-def_country = config.get('nordvpn', 'DEF_COUNTRY')
-
 parser = OptionParser("usage: %prog [options] ",
                           version="%prog 1.0")
 
@@ -53,8 +51,15 @@ parser.add_option("-c", "--country",
                 action="store",
                 type="string",
                 dest="str_country",
-                default=config.get('nordvpn', 'DEF_COUNTRY'),
+                default=config.get('default', 'country'),
                 help="2 digit country identifier")
+
+parser.add_option("-m", "--mode",
+                action="store",
+                type="string",
+                dest="str_mode",
+                default=config.get('default', 'mode'),
+                help="Mode to run VPN in openvpn and ike are supported")
 
 parser.add_option("-l", "--load",
                 action="store",
@@ -62,16 +67,14 @@ parser.add_option("-l", "--load",
                 dest="load")
 
 parser.add_option("-a", "--all",
-                  action="store_true",
-                  dest="dispall",
-                  default=False)
+                action="store_true",
+                dest="dispall",
+                default=False)
 
 
 (options, args) = parser.parse_args()
 
 file_name =  os.path.basename(sys.argv[0])
-
-
 
 def help_func():
     print
