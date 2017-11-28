@@ -26,7 +26,7 @@ import os
 import sys
 from optparse import OptionParser
 import ConfigParser
-from libnordvpn import NordVPN 
+from libnordvpn import NordVPN
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
@@ -61,6 +61,7 @@ parser.add_option("-m", "--mode",
                 default=config.get('default', 'mode'),
                 help="Mode to run VPN in openvpn and ike are supported")
 
+
 parser.add_option("-l", "--load",
                 action="store",
                 type="int",
@@ -70,6 +71,8 @@ parser.add_option("-a", "--all",
                 action="store_true",
                 dest="dispall",
                 default=False)
+
+
 
 
 (options, args) = parser.parse_args()
@@ -82,8 +85,6 @@ def help_func():
     print 
     print "  -c --country  define country to act on"
     print "  -l --load"
-    print "  -a --all "
-    print "  -s --start     Activate VPN to the best server"
     print "  -h --help      This screen"
     
     exit

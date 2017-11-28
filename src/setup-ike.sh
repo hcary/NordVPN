@@ -40,12 +40,13 @@ echo ""
 CONSTRNT_FILE_TMP=$NORD_CONF_DIR"/constraints.conf"
 SECRETS_TMP=$NORD_CONF_DIR"/ipsec.secrets"
 IPSECCNF_TMP=$NORD_CONF_DIR"/ipsec.conf"
-NORD_CRT_TMP=$NORD_CONF_DIR"/NordVPN.der"
+#NORD_CRT_TMP=$NORD_CONF_DIR"/NordVPN.der"
 
 CONSTRNT_FILE="/etc/strongswan.d/charon/constraints.conf"
 SECRETS="/etc/ipsec.secrets"
 IPSECCNF="/etc/ipsec.conf"
 NORD_CRT="/etc/ipsec.d/cacerts/NordVPN.der"
+NORDAUTH=$NORD_CONF_DIR"/auth.txt"
 
 if [ "$1" == "clean" ];
 then
@@ -53,55 +54,44 @@ then
     exit
 fi
 
+function nbackup {
 
+    echo Backing up $1 -> $1-bkup-${dstr}
+    if [ -f $1 ]
+    then
+        cp $1 $1-bkup-${dstr}
+    fi    
+    
+}
 
-#sudo apt install strongswan strongswan-plugin-eap-mschapv2 strongswan-ikev2 libstrongswan-standard-plugins
 echo ""
 
 if [ ! -d $NORD_CONF_DIR ];
 then
     
     mkdir $NORD_CONF_DIR
-    chmod 700 $NORD_CONF_DIR
+    chmod -R 700 $NORD_CONF_DIR
 fi
 
-
-#
-# Make backup copies of files before we overwrite
-if [ -f $CONSTRNT_FILE_TMP ]
-then
-    cp $CONSTRNT_FILE_TMP $CONSTRNT_FILE_TMP-${dstr}
-fi
-
-if [ -f $SECRETS_TMP ]
-then
-    cp $SECRETS_TMP $SECRETS_TMP-${dstr}
-fi
-
-if [ -f $IPSECCNF_TMP ]
-then
-    cp $IPSECCNF_TMP $IPSECCNF_TMP-${dstr}
-fi
-
-if [ -f $NORD_CRT_TMP ]
-then
-    cp $NORD_CRT_TMP $NORD_CRT_TMP-${dstr}
-fi
 
 echo "Updating $CONSTRNT_FILE load from yes to no"
 cp $CONSTRNT_FILE $CONSTRNT_FILE_TMP
 sed -i.bak s/load\ =\ yes/load\ =\ no/g $CONSTRNT_FILE_TMP   
 
+echo Checking for the existance of $NORDAUTH...
+if [ -f "${NORDAUTH}" ]
+then
+    echo "Credentials found..."
+    username=`cat $NORDAUTH | head -1`
+    password=`cat $NORDAUTH | tail -1`
+else
+    echo "Enter your NordVPN username, followed by [ENTER]:"
+    read username
+    
+    echo "Enter your NordVPN password, followed by [ENTER]:"
+    read password   
+fi
 
-echo "Enter your NordVPN username, followed by [ENTER]:"
-read username
-
-echo "Enter your NordVPN password, followed by [ENTER]:"
-read password
-
-#echo "${username} : EAP \"${password}\""
-#username="my_username.$$"
-#password="my_password.$$"
 
 echo "Creating $SECRETS_TMP..."
 cat > $SECRETS_TMP<<EOF
@@ -139,9 +129,7 @@ conn NordVPN
 EOF
 
 cp nordvpn-ike.conf ~/.nordvpn
-#sudo wget https://downloads.nordvpn.com/certificates/root.der -O /etc/ipsec.d/cacerts/NordVPN.der
-echo "Downloading NordVPN root Certificate..."
-wget https://downloads.nordvpn.com/certificates/root.der -O $NORD_CRT_TMP
+
 
 echo All of the files created by the this install script are located in $NORD_CONF_DIR
 echo
@@ -152,14 +140,23 @@ read yn
 if [ "$yn" == "y" ];
 then
 
+    # Make backup copies of files before we overwrite
+    nbackup $CONSTRNT_FILE_TMP
+    nbackup $SECRETS_TMP
+    nbackup $NORD_CRT_TMP
+
+
     echo "Checking Dependencies... "
     ## now loop through the above array
     sudo apt-get install $packages
 
-    sudo cp $CONSTRNT_FILE_TMP $CONSTRNT_FILE
-    sudo cp $SECRETS_TMP $SECRETS
+    echo "Downloading NordVPN root Certificate..."
+    wget https://downloads.nordvpn.com/certificates/root.der -O $NORD_CRT
+
+    sudo mv $CONSTRNT_FILE_TMP $CONSTRNT_FILE
+    sudo mv $SECRETS_TMP $SECRETS
     sudo cp $IPSECCNF_TMP $IPSECCNF
-    sudo cp $NORD_CRT_TMP $NORD_CRT
+    sudo mv $NORD_CRT_TMP $NORD_CRT
 
     sudo cp nordvpn-ike /usr/local/bin
     sudo cp nordvpn-ike.py /usr/local/bin
