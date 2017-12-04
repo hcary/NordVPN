@@ -25,8 +25,7 @@
 
 SCRIPTNAME=$0
 
-status_chk()
-{
+status_chk() {
 
   while :
   do
@@ -39,31 +38,23 @@ status_chk()
 
 
 case "$1" in
-    start)
-        #echo sudo ./nordvpn-ike.py $@
-        sudo nordvpn-ike.py $@
-        sudo ipsec restart
-        sleep 1
-        sudo ipsec up NordVPN
-        sleep 1
-        ;;
     up)
         #echo sudo ./nordvpn-ike.py $@
         sudo nordvpn-ike.py $@
+        sleep 1
         sudo ipsec restart
         sleep 1
         sudo ipsec up NordVPN
-        sleep 1
-        ;;    
-    stop)
-        sudo ipsec down NordVPN
         ;;
+        
     down)
         sudo ipsec down NordVPN
-        ;;    
+        ;;
+        
     status)
         status_chk
         ;;
+        
     *)
         echo "Usage: $SCRIPTNAME {start|stop|status}" >&2
         exit 3

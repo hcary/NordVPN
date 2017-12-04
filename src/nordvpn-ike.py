@@ -78,7 +78,9 @@ parser.add_option("-a", "--all",
 (options, args) = parser.parse_args()
 
 file_name =  os.path.basename(sys.argv[0])
+action = sys.argv[1]
 
+    
 def help_func():
     print
     print file_name [options]
@@ -95,45 +97,48 @@ def run_cmd(cmd_str):
     print "cmd: " + cmd
     os.system( cmd )
 
+def write_ike():
+    
+    print "cmd: " + cmd
+    
+    
 x = NordVPN()
 x.cflag = options.str_country.upper()
 
 data = x.get_servers()
 
-lcount = len(data)
-for record in range(lcount):
+if action == 'up':
+    
+    lcount = len(data)
+    for record in range(lcount):
+    
+        rid = data[record]['id']
+        vpn_server = str(data[x.bestArray]['domain'])
+    
+    
+    
+    filein = APPROOT + "ipsec.conf"
+    fileout = "/etc/ipsec.conf"
+    
+    f = open(filein,'r')
+    filedata = f.read()
+    f.close()
 
-    rid = data[record]['id']
-    vpn_server = str(data[x.bestArray]['domain'])
+    newdata = filedata.replace("right=SERVER","right=" + vpn_server)
+    
+    f = open(fileout,'w')
+    f.write(newdata)
+    f.close()
+    
+    
+    print "*************************************************************"
+    print ""
+    print " Configuring IPSEC for: " + vpn_server
+    print "                  Load: " + str(x.curmin)
+    print ""
+    print "*************************************************************"
 
 
-
-filein = APPROOT + "ipsec.conf"
-fileout = "/etc/ipsec.conf"
-
-f = open(filein,'r')
-filedata = f.read()
-f.close()
-
-newdata = filedata.replace("right=SERVER","right=" + vpn_server)
-
-f = open(fileout,'w')
-f.write(newdata)
-f.close()
-
-
-print "*************************************************************"
-print ""
-print " Configuring IPSEC for: " + vpn_server
-print "                  Load: " + str(x.curmin)
-print ""
-print "*************************************************************"
-
-
-#run_cmd( ipsec_restart )
-#run_cmd( ipsec_up )
-
-#time.sleep(30)
 
 
    
