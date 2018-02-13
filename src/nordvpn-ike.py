@@ -97,52 +97,16 @@ def run_cmd(cmd_str):
     print "cmd: " + cmd
     os.system( cmd )
 
-<<<<<<< HEAD
-vpn = NordVPN()
-vpn.cflag = options.str_country.upper()
-vpn.mode = options.str_mode
-=======
 def write_ike():
     
     print "cmd: " + cmd
     
     
-x = NordVPN()
-x.cflag = options.str_country.upper()
->>>>>>> 5b715d4b43386c42456a54c994a7cbabea609d50
+
 
 data = vpn.get_servers()
 
-<<<<<<< HEAD
-lcount = len(data)
-for record in range(lcount):
 
-    rid = data[record]['id']
-    vpn_server = str(data[vpn.bestArray]['domain'])
-
-
-
-filein = APPROOT + "ipsec.conf"
-fileout = "/etc/ipsec.conf"
-
-f = open(filein,'r')
-filedata = f.read()
-f.close()
-
-newdata = filedata.replace("right=SERVER","right=" + vpn_server)
-
-f = open(fileout,'w')
-f.write(newdata)
-f.close()
-
-
-print "*************************************************************"
-print ""
-print " Configuring IPSEC for: " + vpn_server
-print "                  Load: " + str(vpn.curmin)
-print ""
-print "*************************************************************"
-=======
 if action == 'up':
     
     lcount = len(data)
@@ -159,7 +123,7 @@ if action == 'up':
     f = open(filein,'r')
     filedata = f.read()
     f.close()
->>>>>>> 5b715d4b43386c42456a54c994a7cbabea609d50
+
 
     newdata = filedata.replace("right=SERVER","right=" + vpn_server)
     
