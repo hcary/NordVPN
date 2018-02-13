@@ -39,10 +39,10 @@ server_list     = {}
 BestServer      = "none"
 
 # defaults
-dispall = False
-startVpn = False
+dispall   = False
+startVpn  = False
 help_flag = False
-startVpn = True
+startVpn  = True
 
 def_country = config.get('nordvpn', 'DEF_COUNTRY')
 
@@ -98,16 +98,17 @@ def run_cmd(cmd_str):
     print "cmd: " + cmd
     os.system( cmd )
 
-x = NordVPN()
-x.cflag = options.str_country.upper()
+vpn = NordVPN()
+vpn.cflag = options.str_country.upper()
+vpn.mode = options.str_mode
 
-data = x.get_servers()
+data = vpn.get_servers()
 
 lcount = len(data)
 for record in range(lcount):
 
     rid = data[record]['id']
-    vpn_server = str(data[x.bestArray]['domain'])
+    vpn_server = str(data[vpn.bestArray]['domain'])
 
 
 
@@ -128,7 +129,7 @@ f.close()
 print "*************************************************************"
 print ""
 print " Configuring IPSEC for: " + vpn_server
-print "                  Load: " + str(x.curmin)
+print "                  Load: " + str(vpn.curmin)
 print ""
 print "*************************************************************"
 
