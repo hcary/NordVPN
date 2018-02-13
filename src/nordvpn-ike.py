@@ -31,7 +31,7 @@ from libnordvpn import NordVPN
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
 config = ConfigParser.ConfigParser()
-config.read(APPROOT + "nordvpn-ike.conf")
+config.read(APPROOT + "nordvpn.conf")
 
 # Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
@@ -51,16 +51,22 @@ parser.add_option("-c", "--country",
                 action="store",
                 type="string",
                 dest="str_country",
-                default=config.get('default', 'country'),
+                default=config.get('defaults', 'country'),
                 help="2 digit country identifier")
 
 parser.add_option("-m", "--mode",
                 action="store",
                 type="string",
                 dest="str_mode",
-                default=config.get('default', 'mode'),
+                default=config.get('defaults', 'mode'),
                 help="Mode to run VPN in openvpn and ike are supported")
 
+parser.add_option("-d", "--debug",
+                action="store",
+                type="int",
+                dest="str_debug",
+                default=0,
+                help="Mode to run VPN in openvpn and ike are supported")
 
 parser.add_option("-l", "--load",
                 action="store",
@@ -103,7 +109,8 @@ def write_ike():
 
 vpn = NordVPN()
 vpn.cflag = options.str_country.upper()
-vpn.mode = options.mode
+vpn.mode = options.str_mode
+vpn.debug = options.str_debug
 
 data = vpn.get_servers()
 
