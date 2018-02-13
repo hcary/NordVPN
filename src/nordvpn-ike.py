@@ -100,12 +100,12 @@ def run_cmd(cmd_str):
 def write_ike():
     
     print "cmd: " + cmd
-    
-    
 
+vpn = NordVPN()
+vpn.cflag = options.str_country.upper()
+vpn.mode = options.mode
 
 data = vpn.get_servers()
-
 
 if action == 'up':
     
@@ -113,7 +113,7 @@ if action == 'up':
     for record in range(lcount):
     
         rid = data[record]['id']
-        vpn_server = str(data[x.bestArray]['domain'])
+        vpn_server = str(data[vpn.bestArray]['domain'])
     
     
     
@@ -131,11 +131,10 @@ if action == 'up':
     f.write(newdata)
     f.close()
     
-    
     print "*************************************************************"
     print ""
     print " Configuring IPSEC for: " + vpn_server
-    print "                  Load: " + str(x.curmin)
+    print "                  Load: " + str(vpn.curmin)
     print ""
     print "*************************************************************"
 
