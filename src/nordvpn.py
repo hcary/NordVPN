@@ -45,40 +45,38 @@ help_flag = False
 startVpn  = True
 
 parser = OptionParser("usage: %prog [options] ",
-                          version="%prog 1.0")
+    version="%prog 1.0")
 
 parser.add_option("-c", "--country",
-                action="store",
-                type="string",
-                dest="str_country",
-                default=config.get('defaults', 'country'),
-                help="2 digit country identifier")
+    action="store",
+    type="string",
+    dest="country",
+    default=config.get('defaults', 'country'),
+    help="2 digit country identifier")
 
 parser.add_option("-m", "--mode",
-                action="store",
-                type="string",
-                dest="str_mode",
-                default=config.get('defaults', 'mode'),
-                help="Mode to run VPN in openvpn and ike are supported")
+    action="store",
+    type="string",
+    dest="mode",
+    default=config.get('defaults', 'mode'),
+    help="Mode to run VPN in openvpn and ike are supported")
 
 parser.add_option("-d", "--debug",
-                action="store",
-                type="int",
-                dest="str_debug",
-                default=0,
-                help="Mode to run VPN in openvpn and ike are supported")
+    action="store",
+    type="int",
+    dest="debug",
+    default=0,
+    help="Mode to run VPN in openvpn and ike are supported")
 
 parser.add_option("-l", "--load",
-                action="store",
-                type="int",
-                dest="load")
+    action="store",
+    type="int",
+    dest="load")
 
 parser.add_option("-a", "--all",
-                action="store_true",
-                dest="dispall",
-                default=False)
-
-
+    action="store_true",
+    dest="dispall",
+    default=False)
 
 
 (options, args) = parser.parse_args()
@@ -86,15 +84,12 @@ parser.add_option("-a", "--all",
 file_name =  os.path.basename(sys.argv[0])
 action = sys.argv[1]
 
-    
+
 def help_func():
     print
     print file_name [options]
     print 
-    print "  -c --country  define country to act on"
-    print "  -l --load"
-    print "  -h --help      This screen"
-    
+
     exit
 
 def run_cmd(cmd_str):
@@ -108,9 +103,9 @@ def write_ike():
     print "cmd: " + cmd
 
 vpn = NordVPN()
-vpn.cflag = options.str_country.upper()
-vpn.mode = options.str_mode
-vpn.debug = options.str_debug
+vpn.cflag = options.country.upper()
+vpn.mode = options.mode
+vpn.debug = options.debug
 
 data = vpn.get_servers()
 
@@ -141,7 +136,7 @@ if action == 'up':
     print "*************************************************************"
     print ""
     print " Configuring IPSEC for: " + vpn_server
-    print "                  Load: " + str(vpn.curmin)
+    print "          Load: " + str(vpn.curmin)
     print ""
     print "*************************************************************"
 
