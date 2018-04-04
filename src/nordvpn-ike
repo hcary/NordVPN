@@ -40,7 +40,7 @@ status_chk() {
 case "$1" in
     up)
         #echo sudo ./nordvpn-ike.py $@
-        sudo nordvpn-ike.py $@
+        sudo nordvpn.py $@
         sleep 1
         sudo ipsec restart
         sleep 1

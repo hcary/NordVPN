@@ -28,6 +28,17 @@ NORD_CONF_DIR=$HOME/.nordvpn
 pylibpath=`python -c "import sys; print('\n'.join(sys.path))" | sed -r "/^\r?$/d" | head -1`
 dstr=`date +"%Y%m%d%H%M"`
 
+function copy_bins()
+{
+
+    sudo cp nordvpn /usr/local/bin
+    sudo cp nordvpn.py /usr/local/bin
+    
+    sudo chmod +x /usr/local/bin/nordvpn
+    sudo chmod +x /usr/local/bin/nordvpn.py    
+}
+
+
 echo ""
 echo "This script comes without warrenty and is meant to aid you in setting up your NordVPN client configurations and scripts"
 echo "By running this script you agree than any damages or issues that arise are the reponsibility of the user."
@@ -52,6 +63,14 @@ if [ "$1" == "clean" ];
 then
     rm -f $CONSTRNT_FILE_TMP $SECRETS_TMP $IPSECCNF_TMP $NORD_CRT_TMP $CONSTRNT_FILE_TMP.bak
     exit
+fi
+
+if [ "$1" == "update" ];
+then
+
+    copy_bins
+    exit
+    
 fi
 
 function nbackup {
@@ -158,11 +177,8 @@ then
     sudo cp $IPSECCNF_TMP $IPSECCNF
     sudo mv $NORD_CRT_TMP $NORD_CRT
 
-    sudo cp nordvpn-ike /usr/local/bin
-    sudo cp nordvpn-ike.py /usr/local/bin
-    
-    sudo chmod +x /usr/local/bin/nordvpn-ike
-    sudo chmod +x /usr/local/bin/nordvpn-ike.py
+    copy_bins
+
 
 fi
 
