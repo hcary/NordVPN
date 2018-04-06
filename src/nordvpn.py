@@ -30,8 +30,10 @@ from libnordvpn import NordVPN
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
+openvpn_configs = APPROOT + "/openvpn"
 config = ConfigParser.ConfigParser()
 config.read(APPROOT + "nordvpn.conf")
+
 
 # Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
@@ -59,7 +61,7 @@ parser.add_option("-m", "--mode",
     type="string",
     dest="mode",
     default=config.get('defaults', 'mode'),
-    help="Mode to run VPN in openvpn and ike are supported")
+    help="Mode to run VPN in openvpn_udp openvpn_tcp, and ike are supported")
 
 parser.add_option("-d", "--debug",
     action="store",
@@ -78,11 +80,15 @@ parser.add_option("-a", "--all",
     dest="dispall",
     default=False)
 
+parser.add_option("-u", "--up",
+    action="store_true",
+    dest="action_up",
+    default=False)
 
 (options, args) = parser.parse_args()
 
 file_name =  os.path.basename(sys.argv[0])
-action = sys.argv[1]
+#action = sys.argv[1]
 
 
 def help_func():
@@ -109,7 +115,7 @@ vpn.debug = options.debug
 
 data = vpn.get_servers()
 
-if action == 'up':
+if options.action_up:
     
     lcount = len(data)
     for record in range(lcount):
@@ -117,29 +123,37 @@ if action == 'up':
         rid = data[record]['id']
         vpn_server = str(data[vpn.bestArray]['domain'])
     
-    
-    
-    filein = APPROOT + "ipsec.conf"
-    fileout = "/etc/ipsec.conf"
-    
-    f = open(filein,'r')
-    filedata = f.read()
-    f.close()
 
-
-    newdata = filedata.replace("right=SERVER","right=" + vpn_server)
-    
-    f = open(fileout,'w')
-    f.write(newdata)
-    f.close()
-    
     print "*************************************************************"
     print ""
     print " Configuring IPSEC for: " + vpn_server
     print "          Load: " + str(vpn.curmin)
     print ""
     print "*************************************************************"
-
+    
+    if options.mode == "ipsec":
+        
+        filein = APPROOT + "ipsec.conf"
+        fileout = "/etc/ipsec.conf"
+        
+        f = open(filein,'r')
+        filedata = f.read()
+        f.close()
+    
+    
+        newdata = filedata.replace("right=SERVER","right=" + vpn_server)
+        
+        f = open(fileout,'w')
+        f.write(newdata)
+        f.close()
+    
+    if options.mode == "ovpn":
+        
+        remote_file = str(vpn.curmin) + ".udp1194.ovpn"
+        fileout = "/etc/nordvpn.ovpn"
+        
+        vpn.get_api_files(fileout, remote_file)
+        
 
 
 
