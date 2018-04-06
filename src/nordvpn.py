@@ -34,6 +34,11 @@ openvpn_configs = APPROOT + "/openvpn"
 config = ConfigParser.ConfigParser()
 config.read(APPROOT + "nordvpn.conf")
 
+auth_file       = config.get('nordvpn', 'authFile')
+openVPN_Pid     = config.get('nordvpn', 'pid')
+def_proto       = config.get('nordvpn', config.get('nordvpn', 'def_proto'))
+vpn_configs     = os.getenv("HOME") + "/" + config.get('nordvpn', 'openVpnFilesPath') + "/"
+high_limit      = int(config.get('nordvpn', 'limit'))
 
 # Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
