@@ -44,15 +44,11 @@ case "$1" in
         sudo nordvpn.py $@
         sudo openvpn --config /etc/nordvpn.ovpn
         sleep 1
-        sudo ipsec up NordVPN
-        sleep 1
         ;;
     up)
         #echo sudo ./nordvpn-ike.py $@
         sudo nordvpn.py $@
         sudo openvpn --config /etc/nordvpn.ovpn
-        sleep 1
-        sudo ipsec up NordVPN
         sleep 1
         ;;    
     stop)
