@@ -27,18 +27,26 @@ import sys
 from optparse import OptionParser
 import ConfigParser
 from libnordvpn import NordVPN
+import getpass
 
 HOMEDIR = os.getenv("HOME") + "/"
 APPROOT = HOMEDIR + ".nordvpn/"
-openvpn_configs = APPROOT + "/openvpn"
+ovpn_configs = APPROOT + "openvpn.configs"
+
 config = ConfigParser.ConfigParser()
 config.read(APPROOT + "nordvpn.conf")
 
-auth_file       = config.get('nordvpn', 'authFile')
-openVPN_Pid     = config.get('nordvpn', 'pid')
-def_proto       = config.get('nordvpn', config.get('nordvpn', 'def_proto'))
-vpn_configs     = os.getenv("HOME") + "/" + config.get('nordvpn', 'openVpnFilesPath') + "/"
-high_limit      = int(config.get('nordvpn', 'limit'))
+auth_file           = config.get('nordvpn', 'authFile')
+openVPN_Pid         = config.get('nordvpn', 'pid')
+def_proto           = config.get('nordvpn', config.get('nordvpn', 'def_proto'))
+high_limit          = int(config.get('nordvpn', 'limit'))
+
+url_ovpn_configs    = config.get('nordvpn', 'url_ovpn_configs')
+ovpn_file           = config.get('nordvpn', 'ovpn_file')
+
+
+username = os.getlogin()
+
 
 # Set min_load to 100 so that any value less than that will replace it as the system loops through list
 min_load        = 100
@@ -66,7 +74,19 @@ parser.add_option("-m", "--mode",
     type="string",
     dest="mode",
     default=config.get('defaults', 'mode'),
-    help="Mode to run VPN in openvpn_udp openvpn_tcp, and ike are supported")
+    help="Mode to run VPN in openvpn openvpn, and ipsec are supported")
+
+parser.add_option("-p", "--proto",
+    action="store",
+    type="string",
+    dest="proto",
+    default=config.get('defaults', 'proto'),
+    help="Protocol to use")
+
+parser.add_option("-r", "--refresh",
+    action="store_true",
+    dest="refresh",
+    default=False)
 
 parser.add_option("-d", "--debug",
     action="store",
@@ -113,13 +133,26 @@ def write_ike():
     
     print "cmd: " + cmd
 
-vpn = NordVPN()
-vpn.cflag = options.country.upper()
-vpn.mode = options.mode
-vpn.debug = options.debug
+def setup_dir(directory):
+
+    print "Checking for directory " + directory
+    
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
+    
+vpn         = NordVPN()
+vpn.cflag   = options.country.upper()
+vpn.mode    = options.mode
+vpn.debug   = options.debug
 
 data = vpn.get_servers()
 
+setup_dir(APPROOT)
+setup_dir(ovpn_configs)
+
+proto_tag = config.get('nordvpn', options.proto)
+print "tag: " + proto_tag
+    
 if options.action_up:
     
     lcount = len(data)
@@ -135,6 +168,8 @@ if options.action_up:
     print "          Load: " + str(vpn.curmin)
     print ""
     print "*************************************************************"
+    
+    print "MODE: " + options.mode
     
     if options.mode == "ipsec":
         
@@ -154,13 +189,13 @@ if options.action_up:
     
     if options.mode == "ovpn":
         
-        remote_file = str(vpn.curmin) + ".udp1194.ovpn"
-        fileout = "/etc/nordvpn.ovpn"
-        
-        vpn.get_api_files(fileout, remote_file)
+        server_ovpn = vpn_server + "." + proto_tag + ".ovpn"
+        vpn.get_api_files(ovpn_configs, server_ovpn)
         
 
-
+if options.refresh:
+    
+    vpn.get_ovpn_zip(ovpn_configs, url_ovpn_configs, ovpn_file)
 
    
     

@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
 # Python library for handling NordVPN server statistics
-# 
+#
+import os
 import sys
 import json
 import requests
-
+import zipfile
     
 class NordVPN:
     
@@ -89,29 +90,52 @@ class NordVPN:
         
         
         
-    def get_api_files(self, localFile, remoteFile):
+    def get_api_files(self, local_path, server_ovpn):
+                      #local_file, remote_file):
     
         # Download OpenVPN files
-        if (os.path.exists(loc_file)):
-            BestServer = localFile
+        local_file = local_path + "/" + server_ovpn
+        if (os.path.exists(local_file)):
+            BestServer = local_file
             return
         
-        vpnFileUrl = openVPNFilesURL + "/" + remoteFile
+        vpnFileUrl = self.openVPNFilesURL + "/" + server_ovpn
     
-        print "Downloading " + vpnFileUrl + " -> " + localFile
+        print "Downloading " + vpnFileUrl + " -> " + local_file
         apif = requests.get(vpnFileUrl)
         
         #if isinstance('{"status":404}', apif.content):
         if '{"status":404}' in apif.content:
            print "Error: status: 404"
-           #os.remove(localFile)
+           #os.remove(local_file)
         else:
-            with open(localFile, "wb") as code:
+            with open(local_file, "wb") as code:
                 code.write(apif.content)
     
-            update_vpn_config(localFile)
-            BestServer = localFile
+            update_vpn_config(local_file)
+            BestServer = local_file
     
+    def get_ovpn_zip(self, ovpn_configs, url_ovpn_configs, ovpn_file):
+
+        local_file = ovpn_configs + "/" + ovpn_file
+        uri = url_ovpn_configs + ovpn_file
+        
+        print "Downloading " + uri + " -> " + local_file
+        apif = requests.get(uri)
+
+        #if isinstance('{"status":404}', apif.content):
+        if '{"status":404}' in apif.content:
+           print "Error: status: 404"
+           #os.remove(local_file)
+        else:
+            with open(local_file, "wb") as code:
+                code.write(apif.content)
+        
+        with zipfile.ZipFile(local_file, "r") as zip_ref:
+            zip_ref.extractall(ovpn_configs)
+        
+        #os.chown(ovpn_configs, os.getlogin(), os.getlogin())
+        
     def get_lowest_load(self):
         print "hello"
         # inside get_lowest_load
