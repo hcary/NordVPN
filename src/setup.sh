@@ -31,7 +31,7 @@ dstr=`date +"%Y%m%d%H%M"`
 function copy_bins()
 {
 
-    sudo cp nordvpn /usr/local/bin
+    sudo cp nordvpn.sh /usr/local/bin/nordvpn
     sudo cp nordvpn.py /usr/local/bin
     
     sudo chmod +x /usr/local/bin/nordvpn
