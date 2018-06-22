@@ -1,4 +1,5 @@
 
+
 Welcome to NORD VPN for Linux
 ===========================
 
@@ -41,10 +42,10 @@ The default is to use UDP but can be changed to TCP by chaning the **DEF_PROTO**
 # nordVPN-IKEv2-ipsec
 
 # sudo ipsec up NordVPN 
-=======
+
 Install
 -------
-**sudo ./setup-ike.sh** 
+**sudo ./setup.sh** 
 [sudo] password for hcary: 
 
 This script comes without warrenty and is meant to aid you in setting up your NordVPN client configurations and scripts
@@ -80,8 +81,7 @@ All of the files created by the this install script are located in /home/**USERN
 
 Running
 -------
-sudo ~/.nordvpn-ike up -c US
+sudo ~/.nordvpn --up -c US
 
 The default is to use UDP but can be changed to TCP by chaning the **DEF_PROTO**value in the configuration file. 
-
 
