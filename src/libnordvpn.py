@@ -37,12 +37,14 @@ class NordVPN:
         
     def get_servers(self):     
 
-        print "Calling " + self.apiURL
+        #print "Calling " + self.apiURL
+        self.dsp("Calling " + self.apiURL)
+
         r = requests.get(self.apiURL)
-        print r.status_code
-        if r.status_code != 200:
+        if r.status_code == 200:
+            self.dsp("     [OK]\n")
+        else:
             print "Error retrieving data from " + apiURL
-            #sys.exit()
             return 'Error ' + r.status_code
  
         data = json.loads(r.text)
@@ -139,4 +141,10 @@ class NordVPN:
     def get_lowest_load(self):
         print "hello"
         # inside get_lowest_load
+        
+
+    def dsp(self, msg):
+        sys.stdout.write(msg)
+        sys.stdout.flush()
+        
         

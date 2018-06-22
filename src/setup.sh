@@ -33,9 +33,11 @@ function copy_bins()
 
     sudo cp nordvpn.sh /usr/local/bin/nordvpn
     sudo cp nordvpn.py /usr/local/bin
+    sudo cp libnordvpn.py $pylibpath/
     
     sudo chmod +x /usr/local/bin/nordvpn
-    sudo chmod +x /usr/local/bin/nordvpn.py    
+    sudo chmod +x /usr/local/bin/nordvpn.py
+    sudo chmod +x $pylibpath/libnordvpn.py
 }
 
 

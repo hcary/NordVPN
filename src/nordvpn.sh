@@ -37,24 +37,44 @@ status_chk() {
 }
 
 
+
+mode=`sudo nordvpn.py --getmode`
+
 case "$1" in
-    up)
+    --up)
         #echo sudo ./nordvpn-ike.py $@
         sudo nordvpn.py $@
         echo "Exit status " $?
         sleep 1
-        sudo ipsec restart
-        echo "Exit status " $?
-        sleep 1
-        sudo ipsec up NordVPN
-        echo "Exit status " $?
-        sleep 1
+        case $mode in
+          ikev2)
+            sudo ipsec restart
+            echo "Exit status " $?
+            sleep 1
+            sudo ipsec up NordVPN
+            echo "Exit status " $?
+            sleep 1
+            ;;
+          openvpn)
+            sudo openvpn --config /etc/nordvpn.ovpn
+            sleep 1
+            ;;
+        esac
         curl ipinfo.io
         ;;
         
-    down)
-        sudo ipsec down NordVPN
-        echo "Exit status " $?
+    --down)
+      case $mode in
+        ikev2)
+          sudo ipsec down NordVPN
+          echo "Exit status " $?
+          sleep 1
+          ;;
+        openvpn)
+          sudo ipsec down NordVPN
+          sleep 1
+          ;;
+        esac
         sleep 1
         curl ipinfo.io
         ;;

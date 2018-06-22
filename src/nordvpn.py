@@ -110,6 +110,11 @@ parser.add_option("-u", "--up",
     dest="action_up",
     default=False)
 
+parser.add_option("--getmode",
+    action="store_true",
+    dest="getmode",
+    default=False)
+
 (options, args) = parser.parse_args()
 
 file_name =  os.path.basename(sys.argv[0])
@@ -135,10 +140,17 @@ def write_ike():
 
 def setup_dir(directory):
 
-    print "Checking for directory " + directory
+    vpn.dsp("Checking for directory " + directory)
     
     if not os.path.exists(directory):
         os.makedirs(directory) 
+    else:
+        vpn.dsp("     [OK]\n")
+        
+
+if options.getmode:
+    print options.mode
+    exit()
     
 vpn         = NordVPN()
 vpn.cflag   = options.country.upper()
@@ -152,7 +164,8 @@ setup_dir(ovpn_configs)
 
 proto_tag = config.get('nordvpn', options.proto)
 print "tag: " + proto_tag
-    
+print "MODE: " + options.mode
+
 if options.action_up:
     
     lcount = len(data)
@@ -169,12 +182,15 @@ if options.action_up:
     print ""
     print "*************************************************************"
     
-    print "MODE: " + options.mode
     
-    if options.mode == "ipsec":
+    
+    if options.mode == "ikev2":
         
         filein = APPROOT + "ipsec.conf"
         fileout = "/etc/ipsec.conf"
+        
+        vpn.dsp("Reading " + APPROOT + "ipsec.conf\n")
+        vpn.dsp("Writting output to: /etc/ipsec.conf\n")
         
         f = open(filein,'r')
         filedata = f.read()

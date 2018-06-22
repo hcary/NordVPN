@@ -21,6 +21,7 @@ CONSTRNT_FILE="/etc/strongswan.d/charon/constraints.conf"
 SECRETS="/etc/ipsec.secrets​"
 IPSECCNF="/etc/ipsec.conf"
 NORD_CRT="/etc/ipsec.d/cacerts/NordVPN.der"
+PYTHON_PATH=`python -c "import sys; print(sys.path[1])"`
 
 if [ "$1" == "clean" ];
 then
